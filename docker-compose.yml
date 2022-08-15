@@ -1,0 +1,34 @@
+version: "3.5"
+
+services:
+  pchome_db:
+    image: mysql:5.7
+    container_name: pchome_mysql
+    environment:
+      MYSQL_PASSWORD: 11111111
+      MYSQL_ROOT_PASSWORD: 11111111
+      MYSQL_DATABASE: productdb
+    volumes:
+      - ./db/mysql/mysql_data:/var/lib/mysql
+    ports:
+      - '3307:3306'
+    networks:
+      - pchome-network
+
+  phpmyadmin_pchome:
+    depends_on:
+      - pchome_db
+    image: phpmyadmin/phpmyadmin
+    container_name: pchome_phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: pchome_db
+    networks:
+      - pchome-network
+
+networks:
+  pchome-network:
+    external:
+      name: pchome-network
